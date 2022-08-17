@@ -2,9 +2,12 @@ package com.example.demo_test.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.example.demo_test.enums.SexEnum;
+import com.example.demo_test.typehandlers.ListTypeHandler;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author qiwenbo
@@ -13,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-@TableName("student")
+@TableName(value = "student", autoResultMap = true)
 public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -25,4 +28,9 @@ public class User {
     private SexEnum sex;
     @TableLogic
     private Integer status;
+
+    @TableField(typeHandler = ListTypeHandler.class)
+    private List<String> features;
+
+
 }

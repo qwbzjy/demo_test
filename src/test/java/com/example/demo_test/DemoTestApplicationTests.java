@@ -35,7 +35,8 @@ class DemoTestApplicationTests {
 
     @Test
     public void insert() {
-        User build = User.builder().deptId(1).name("alice3").remark("like baseball").sex(SexEnum.MAN).build();
+        List<String> features = Arrays.asList("x", "y", "z");
+        User build = User.builder().deptId(1).name("alice4").remark("like baseball").sex(SexEnum.MAN).features(features).build();
         userMapper.insert(build);
     }
 
@@ -111,7 +112,7 @@ class DemoTestApplicationTests {
 
     @Test
     public void selectById() {
-        User user = userMapper.selectById(7);
+        User user = userMapper.selectById(12);
         System.out.println(user);
     }
 
