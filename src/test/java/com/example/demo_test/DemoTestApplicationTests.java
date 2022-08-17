@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo_test.enums.SexEnum;
 import com.example.demo_test.mapper.UserMapper;
+import com.example.demo_test.po.ExtendInfo;
 import com.example.demo_test.po.User;
 import com.example.demo_test.reflect.Per;
 import com.example.demo_test.strategy.House;
@@ -35,8 +36,9 @@ class DemoTestApplicationTests {
 
     @Test
     public void insert() {
-        List<String> features = Arrays.asList("x", "y", "z");
-        User build = User.builder().deptId(1).name("alice4").remark("like baseball").sex(SexEnum.MAN).features(features).build();
+        List<String> features = Arrays.asList("u", "v", "w");
+        ExtendInfo extendInfo = ExtendInfo.builder().address("hz").email("123@qq.com").age(10).build();
+        User build = User.builder().deptId(1).name("alice9").remark("like baseball 9").sex(SexEnum.MAN).features(features).extendInfo(extendInfo).build();
         userMapper.insert(build);
     }
 
@@ -112,7 +114,7 @@ class DemoTestApplicationTests {
 
     @Test
     public void selectById() {
-        User user = userMapper.selectById(12);
+        User user = userMapper.selectById(13);
         System.out.println(user);
     }
 
