@@ -15,9 +15,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 //@Import({TestImportA.class, TestImportB.class})
 //@Import(TestImportConfig.class)
 @TestImport

@@ -1,14 +1,14 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >-->
-<!--<mapper namespace="com.example.demo_test.mapper">-->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo_test.mapper">
 
-<!--    <select id="selectUserPage" resultType="com.example.demo_test.po.User">-->
-<!--        select *-->
-<!--        from student ${ew.customSqlSegment}-->
-<!--    </select>-->
+    <select id="selectUserPage" resultType="com.example.demo_test.po.User">
+        select *
+        from student ${ew.customSqlSegment}
+    </select>
 
-<!--    &lt;!&ndash;    <select id="selectUserPage2" resultType="map">&ndash;&gt;-->
-<!--    &lt;!&ndash;        select * from user where age &gt;=#{age}&ndash;&gt;-->
-<!--    &lt;!&ndash;    </select>&ndash;&gt;-->
+    <!--    <select id="selectUserPage2" resultType="map">-->
+    <!--        select * from user where age &gt;=#{age}-->
+    <!--    </select>-->
 
-<!--</mapper>-->
+</mapper>

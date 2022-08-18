@@ -28,7 +28,7 @@ public class ExecutorConfig {
 
 
     @Bean
-    public ThreadPoolTaskExecutor taskExecutor() {
+    public ThreadPoolTaskExecutor executor1() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         //核心线程数
         executor.setCorePoolSize(core);
