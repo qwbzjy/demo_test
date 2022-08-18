@@ -2,6 +2,7 @@ package com.example.demo_test.typehandlers;
 
 import cn.hutool.core.collection.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,16 +41,25 @@ public class ListTypeHandler implements TypeHandler<List<String>> {
 
     @Override
     public List<String> getResult(ResultSet rs, String columnName) throws SQLException {
-        return Arrays.asList(rs.getString(columnName).split(","));
+        if (StringUtils.isNotBlank(rs.getString(columnName))) {
+            return Arrays.asList(rs.getString(columnName).split(","));
+        }
+        return Collections.emptyList();
     }
 
     @Override
     public List<String> getResult(ResultSet rs, int columnIndex) throws SQLException {
-        return Arrays.asList(rs.getString(columnIndex).split(","));
+        if (StringUtils.isNotBlank(rs.getString(columnIndex))) {
+            return Arrays.asList(rs.getString(columnIndex).split(","));
+        }
+        return Collections.emptyList();
     }
 
     @Override
     public List<String> getResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return Arrays.asList(cs.getString(columnIndex).split(","));
+        if (StringUtils.isNotBlank(cs.getString(columnIndex))) {
+            return Arrays.asList(cs.getString(columnIndex).split(","));
+        }
+        return Collections.emptyList();
     }
 }

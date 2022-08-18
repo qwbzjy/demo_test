@@ -127,7 +127,8 @@ class DemoTestApplicationTests {
     @Test
     public void selectOne() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", "alice");
+        queryWrapper.lambda().eq(User::getName, "alice");
+//        queryWrapper.eq("name", "alice");
         User user = userMapper.selectOne(queryWrapper);
         System.out.println(user);
     }
@@ -158,9 +159,10 @@ class DemoTestApplicationTests {
     @Test
     public void selectPage() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name", "ice");
-        Page<User> page = new Page<>(1, 2, false);
-//        Page<User> page = new Page<>(1, 2);
+//        queryWrapper.like("name", "ice");
+        queryWrapper.lambda().like(User::getName, "ice");
+//        Page<User> page = new Page<>(1, 2, false);
+        Page<User> page = new Page<>(1, 2);
         Page<User> page1 = userMapper.selectPage(page, queryWrapper);
         System.out.println(page1.getTotal() + "   " + page1.getPages() + " " + page1.getCurrent() + " " + page1.getSize());
         page1.getRecords().forEach(System.out::println);
