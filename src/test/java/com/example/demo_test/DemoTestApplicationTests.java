@@ -9,6 +9,7 @@ import com.example.demo_test.mapper.UserMapper;
 import com.example.demo_test.po.ExtendInfo;
 import com.example.demo_test.po.User;
 import com.example.demo_test.reflect.Per;
+import com.example.demo_test.service.impl.BusinessServiceImpl;
 import com.example.demo_test.strategy.House;
 import com.example.demo_test.template.ApplicationContextUtil;
 import com.example.demo_test.template.HouseTemplate;
@@ -27,6 +28,13 @@ class DemoTestApplicationTests {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private BusinessServiceImpl businessService;
+
+    @Test
+    public void testAop() {
+        businessService.executeBuss();
+    }
 
     @Test
     public void getAll() {
