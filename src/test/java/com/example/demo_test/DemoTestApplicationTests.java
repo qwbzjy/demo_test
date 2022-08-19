@@ -16,6 +16,7 @@ import com.example.demo_test.template.HouseTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import javax.print.attribute.HashAttributeSet;
@@ -31,9 +32,40 @@ class DemoTestApplicationTests {
     @Autowired
     private BusinessServiceImpl businessService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Test
     public void testAop() {
         businessService.executeBuss();
+    }
+
+    @Test
+    public void testRedis() {
+        //=====================string============
+//        redisTemplate.opsForValue().set("t1", "测试数据");
+//        System.out.println(redisTemplate.opsForValue().get("t1"));
+        //=====================list============
+//        redisTemplate.opsForList().leftPushAll("list1", "a", "b");
+//        List<String> list1 = redisTemplate.opsForList().range("list1", 0, -1);
+//        System.out.println(list1);
+//        List<String> ls = new ArrayList<>();
+//        ls.add("c");
+//        ls.add("d");
+//        redisTemplate.opsForList().leftPush("list1", ls);
+//        List<String> list2 = redisTemplate.opsForList().range("list1", 0, -1);
+//        System.out.println(list2);
+
+        //=====================hash============
+//        redisTemplate.opsForHash().put("key1","k1","v1");
+//        System.out.println(redisTemplate.opsForHash().get("key1","k1"));
+        //=====================set============
+//        redisTemplate.opsForSet().add("set1","1","2");
+//        System.out.println(redisTemplate.opsForSet().members("set1"));
+        //=====================sorted set============
+        redisTemplate.opsForZSet().add("zset1", "order", 1.0);
+        redisTemplate.opsForZSet().add("zset1", "goods", 2.0);
+        System.out.println(redisTemplate.opsForZSet().popMax("zset1"));
     }
 
     @Test
