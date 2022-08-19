@@ -13,13 +13,18 @@ import com.example.demo_test.service.impl.BusinessServiceImpl;
 import com.example.demo_test.strategy.House;
 import com.example.demo_test.template.ApplicationContextUtil;
 import com.example.demo_test.template.HouseTemplate;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.web.client.RestTemplate;
 
 import javax.print.attribute.HashAttributeSet;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -33,7 +38,27 @@ class DemoTestApplicationTests {
     private BusinessServiceImpl businessService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RestTemplate httpClientTemplate;
+
+    @Autowired
+    private CloseableHttpClient httpClient;
+
+    @Test
+    void test() throws IOException {
+
+        String result = httpClientTemplate.getForObject("https://www.baidu.com/", String.class);
+        System.out.println("httpClientTemplate===" + result);
+
+
+        // 声明 http get 请求
+        String url = "https://www.baidu.com/";
+        HttpGet httpGet = new HttpGet(url);
+        // 发起请求
+        CloseableHttpResponse response = this.httpClient.execute(httpGet);
+        System.out.println("httpClient===" + response);
+    }
 
     @Test
     public void testAop() {
