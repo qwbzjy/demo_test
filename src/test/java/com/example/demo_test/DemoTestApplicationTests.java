@@ -176,6 +176,16 @@ class DemoTestApplicationTests {
         page1.getRecords().forEach(System.out::println);
     }
 
+    // 自定义分页方法
+    @Test
+    public void selectUserPage() {
+        Page<User> page = new Page<>(1, 2);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().like(User::getName, "ice");
+        IPage<User> userIPage = userMapper.selectUserPage(page, queryWrapper);
+        System.out.println("=============");
+    }
+
     @Test
     public void testAllEq() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
