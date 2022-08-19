@@ -4,6 +4,7 @@ import com.example.demo_test.common.Result;
 import com.example.demo_test.po.Files;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
@@ -18,7 +19,7 @@ public interface FileService {
      * @param file
      * @return
      */
-    Result upLoadFiles(MultipartFile file);
+    Result upLoadFiles(MultipartFile file) throws FileNotFoundException;
 
     /**
      * 根据id获取文件

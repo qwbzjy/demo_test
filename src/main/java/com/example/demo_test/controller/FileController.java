@@ -8,6 +8,7 @@ import com.example.demo_test.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +34,7 @@ public class FileController {
 
     //文件上传接口
     @PostMapping(value = "/upload")
-    public Result upLoadFiles(MultipartFile multipartFile) {
+    public Result upLoadFiles(MultipartFile multipartFile) throws FileNotFoundException {
         //如果文件为空，直接返回错误信息
         if (multipartFile.isEmpty()) {
             return new Result(ResponseCode.FILE_EMPTY.getCode(), ResponseCode.FILE_EMPTY.getMsg(), null);

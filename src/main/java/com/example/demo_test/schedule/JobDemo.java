@@ -46,8 +46,8 @@ public class JobDemo {
     @Value("${file.save-path}")
     private String deleteFilePath;
 
-    @Async("executor1")
-    @Scheduled(cron = "*/10 * * * * ?")
+//    @Async("executor1")
+//    @Scheduled(cron = "*/10 * * * * ?")
     public void deleteFiles() {
         deleteFile(new File(deleteFilePath));
     }

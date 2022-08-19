@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -28,7 +29,7 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public Result upLoadFiles(MultipartFile file) {
+    public Result upLoadFiles(MultipartFile file) throws FileNotFoundException {
         //设置支持最大上传的文件，这里是1024*1024*2=2M
         long MAX_SIZE = 2097152L;
         //获取要上传文件的名称
@@ -45,6 +46,7 @@ public class FileServiceImpl implements FileService {
         String suffixName = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf(".")) : null;
         //文件的保存重新按照时间戳命名
 //        String newName = System.currentTimeMillis() + suffixName;
+//        savePath = ResourceUtils.getURL("classpath:").getPath() + "file/" ;
         File newFile = new File(savePath, fileName);
         if (!newFile.getParentFile().exists()) {
             newFile.getParentFile().mkdirs();
