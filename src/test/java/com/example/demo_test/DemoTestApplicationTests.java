@@ -38,8 +38,9 @@ class DemoTestApplicationTests {
     public void insert() {
         List<String> features = Arrays.asList("u", "v", "w");
         ExtendInfo extendInfo = ExtendInfo.builder().address("hz").email("123@qq.com").age(10).build();
-        User build = User.builder().deptId(1).name("alice9").remark("like baseball 9").sex(SexEnum.MAN).features(features).extendInfo(extendInfo).build();
-        userMapper.insert(build);
+        User build = User.builder().deptId(1).name("alice10").remark("like baseball 9").sex(SexEnum.MAN).features(features).extendInfo(extendInfo).build();
+        int insert = userMapper.insert(build);
+        System.out.println(insert+"   插入后的主键id: "+build.getId());
     }
 
     @Test
