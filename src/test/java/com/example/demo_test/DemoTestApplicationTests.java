@@ -9,15 +9,22 @@ import com.example.demo_test.mapper.UserMapper;
 import com.example.demo_test.po.ExtendInfo;
 import com.example.demo_test.po.User;
 import com.example.demo_test.reflect.Per;
+import com.example.demo_test.service.impl.BusinessServiceImpl;
 import com.example.demo_test.strategy.House;
 import com.example.demo_test.template.ApplicationContextUtil;
 import com.example.demo_test.template.HouseTemplate;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.web.client.RestTemplate;
 
 import javax.print.attribute.HashAttributeSet;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -27,6 +34,64 @@ class DemoTestApplicationTests {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private BusinessServiceImpl businessService;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RestTemplate httpClientTemplate;
+
+    @Autowired
+    private CloseableHttpClient httpClient;
+
+    @Test
+    void test() throws IOException {
+
+        String result = httpClientTemplate.getForObject("https://www.baidu.com/", String.class);
+        System.out.println("httpClientTemplate===" + result);
+
+
+        // 声明 http get 请求
+        String url = "https://www.baidu.com/";
+        HttpGet httpGet = new HttpGet(url);
+        // 发起请求
+        CloseableHttpResponse response = this.httpClient.execute(httpGet);
+        System.out.println("httpClient===" + response);
+    }
+
+    @Test
+    public void testAop() {
+        businessService.executeBuss();
+    }
+
+    @Test
+    public void testRedis() {
+        //=====================string============
+//        redisTemplate.opsForValue().set("t1", "测试数据");
+//        System.out.println(redisTemplate.opsForValue().get("t1"));
+        //=====================list============
+//        redisTemplate.opsForList().leftPushAll("list1", "a", "b");
+//        List<String> list1 = redisTemplate.opsForList().range("list1", 0, -1);
+//        System.out.println(list1);
+//        List<String> ls = new ArrayList<>();
+//        ls.add("c");
+//        ls.add("d");
+//        redisTemplate.opsForList().leftPush("list1", ls);
+//        List<String> list2 = redisTemplate.opsForList().range("list1", 0, -1);
+//        System.out.println(list2);
+
+        //=====================hash============
+//        redisTemplate.opsForHash().put("key1","k1","v1");
+//        System.out.println(redisTemplate.opsForHash().get("key1","k1"));
+        //=====================set============
+//        redisTemplate.opsForSet().add("set1","1","2");
+//        System.out.println(redisTemplate.opsForSet().members("set1"));
+        //=====================sorted set============
+        redisTemplate.opsForZSet().add("zset1", "order", 1.0);
+        redisTemplate.opsForZSet().add("zset1", "goods", 2.0);
+        System.out.println(redisTemplate.opsForZSet().popMax("zset1"));
+    }
 
     @Test
     public void getAll() {
@@ -128,7 +193,8 @@ class DemoTestApplicationTests {
     @Test
     public void selectOne() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("name", "alice");
+        queryWrapper.lambda().eq(User::getName, "alice");
+//        queryWrapper.eq("name", "alice");
         User user = userMapper.selectOne(queryWrapper);
         System.out.println(user);
     }
@@ -159,12 +225,23 @@ class DemoTestApplicationTests {
     @Test
     public void selectPage() {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name", "ice");
-        Page<User> page = new Page<>(1, 2, false);
-//        Page<User> page = new Page<>(1, 2);
+//        queryWrapper.like("name", "ice");
+        queryWrapper.lambda().like(User::getName, "ice");
+//        Page<User> page = new Page<>(1, 2, false);
+        Page<User> page = new Page<>(1, 2);
         Page<User> page1 = userMapper.selectPage(page, queryWrapper);
         System.out.println(page1.getTotal() + "   " + page1.getPages() + " " + page1.getCurrent() + " " + page1.getSize());
         page1.getRecords().forEach(System.out::println);
+    }
+
+    // 自定义分页方法
+    @Test
+    public void selectUserPage() {
+        Page<User> page = new Page<>(1, 2);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().like(User::getName, "ice");
+        IPage<User> userIPage = userMapper.selectUserPage(page, queryWrapper);
+        System.out.println("=============");
     }
 
     @Test

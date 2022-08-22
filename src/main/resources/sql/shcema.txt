@@ -4,6 +4,16 @@ CREATE TABLE `student` (
   `name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `remark` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
   `sex` tinyint DEFAULT NULL,
-  `status` tinyint(1) DEFAULT 1,
+  `status` tinyint(1) DEFAULT '1',
+  `features` varchar(1024) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '扩展字段',
+  `extend_info` varchar(1024) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE `file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `filePath` varchar(255) DEFAULT NULL,
+  `fileName` varchar(255) DEFAULT NULL,
+  `fileSuffix` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
