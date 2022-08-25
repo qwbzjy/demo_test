@@ -33,6 +33,9 @@ public class User {
     private String name;
     private String remark;
     private SexEnum sex;
+    /**
+     *  @TableLogic 会在select、update delete时自动过滤掉已删除的数据 ; insert不作限制 ;
+     */
     @TableLogic
     private Integer status;
 

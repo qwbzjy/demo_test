@@ -1,6 +1,7 @@
 package com.example.demo_test;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -29,6 +30,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * mybatis-plus 查询写法: https://blog.csdn.net/goodjava2007/article/details/125158194
+ */
 @SpringBootTest
 class DemoTestApplicationTests {
 
@@ -103,7 +107,7 @@ class DemoTestApplicationTests {
     public void insert() {
         List<String> features = Arrays.asList("u", "v", "w");
         ExtendInfo extendInfo = ExtendInfo.builder().address("hz").email("123@qq.com").age(10).build();
-        User build = User.builder().deptId(1).name("alice9").remark("like baseball 9").sex(SexEnum.MAN).features(features).extendInfo(extendInfo).build();
+        User build = User.builder().deptId(1).name("alice9999").remark("like baseball 9").sex(SexEnum.MAN).features(features).extendInfo(extendInfo).build();
         userMapper.insert(build);
     }
 
@@ -115,9 +119,12 @@ class DemoTestApplicationTests {
 
     @Test
     public void update_02() {
-        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("name", "alice2").set("remark", "like basketball");
-        userMapper.update(null, updateWrapper);
+//        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("name", "alice2").set("remark", "like basketball");
+//        userMapper.update(null, updateWrapper);
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getName, "alice2").set(User::getRemark, "like basketball xyz333333");
+        userMapper.update(null, wrapper);
     }
 
     @Test
@@ -143,9 +150,15 @@ class DemoTestApplicationTests {
 
     @Test
     public void delete_03() {
-        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("remark", "好好学习，天天向上！");
-        userMapper.delete(updateWrapper);
+//        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+//        updateWrapper.eq("remark", "好好学习，天天向上！");
+//        userMapper.delete(updateWrapper);
+        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(User::getRemark, "like baseball 9").set(User::getRemark, "like baseball 10");
+        userMapper.update(null, wrapper);
+//        User user = User.builder().deptId(1).name("xx").sex(SexEnum.MAN).remark("yyyy").build();
+//        userMapper.update(user,wrapper);
+
     }
 
     @Test
