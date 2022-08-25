@@ -31,7 +31,15 @@ public class Java8Test {
         // removeIf中的test方法返回true代表当前元素会被过滤掉；
         //filter中的test方法返回true代表当前元素会保留下来。
         List<Book> distinctNameBooks3 = books.stream().filter(distinctByKey(Book::getName)).collect(Collectors.toList());
-        System.out.println(distinctNameBooks3);
+        List<Book> collect = books.stream().distinct().collect(Collectors.toList());
+        Map<String, List<Book>> collect1 = books.stream().collect(Collectors.groupingBy(Book::getName));
+        collect1.forEach((key, value) -> {
+            System.out.println(key);
+            System.out.println(value);
+
+        });
+
+//        System.out.println(distinctNameBooks3);
     }
 
     public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
