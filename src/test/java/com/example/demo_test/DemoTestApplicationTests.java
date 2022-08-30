@@ -16,6 +16,7 @@ import com.example.demo_test.template.HouseTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import javax.print.attribute.HashAttributeSet;
@@ -220,8 +221,9 @@ class DemoTestApplicationTests {
     }
 
     @Test
+    @Rollback(value = false)
     public void deleteLogic() {
-        userMapper.deleteById(7);
+        userMapper.deleteById(2);
     }
 
 

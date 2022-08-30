@@ -33,7 +33,7 @@ public class User {
     private String name;
     private String remark;
     private SexEnum sex;
-    @TableLogic
+//    @TableLogic
     private Integer status;
 
     @TableField(jdbcType = JdbcType.VARCHAR, typeHandler = ListTypeHandler.class)
