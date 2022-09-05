@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * @author qiwenbo
  * @date 2022/8/25 15:08
- * @Description
+ * @Description  图书类
  */
 @Data
 @NoArgsConstructor
