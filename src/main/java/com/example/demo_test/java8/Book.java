@@ -12,7 +12,6 @@ import java.util.Date;
  * @author qiwenbo
  * @date 2022/8/25 15:08
  * @Description  图书类
- * 测试 rebase的合并多次提交的功能
  */
 @Data
 @NoArgsConstructor
