@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://www.flowable.org/processdef" exporter="Camunda Modeler" exporterVersion="5.3.0">
+  <process id="StudentLeave" name="学生请假流程" isExecutable="true">
+    <startEvent id="start" name="开始" flowable:formFieldValidation="true"/>
+    <userTask id="apply" name="请假申请" flowable:assignee="${studentUser}" flowable:formFieldValidation="true">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler">false</modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <userTask id="teacherPass" name="老师审批" flowable:candidateGroups="teacher" flowable:formFieldValidation="true"/>
+    <exclusiveGateway id="judgeTask" name="判断是否大于2天"/>
+    <endEvent id="end" name="结束"/>
+    <userTask id="principalPass" name="校长审批" flowable:candidateGroups="principal" flowable:formFieldValidation="true"/>
+    <sequenceFlow id="principalCheck" name="通过" sourceRef="principalPass" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression">${outcome=='通过'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="principalNotPassFlow" name="驳回" sourceRef="principalPass" targetRef="apply">
+      <conditionExpression xsi:type="tFormalExpression">${outcome=='驳回'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="teacherPassFlow" name="通过" sourceRef="teacherPass" targetRef="judgeTask">
+      <conditionExpression xsi:type="tFormalExpression">${outcome=='通过'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="teacherNotPassFlow" name="驳回" sourceRef="teacherPass" targetRef="apply">
+      <conditionExpression xsi:type="tFormalExpression">${outcome=='驳回'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="startFlow" name="流程开始" sourceRef="start" targetRef="apply"/>
+    <sequenceFlow id="applyFlow" name="申请流程" sourceRef="apply" targetRef="teacherPass"/>
+    <sequenceFlow id="judgeLess" name="小于2天" sourceRef="judgeTask" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression">${day &lt;= 2}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="judgeMore" name="大于2天" sourceRef="judgeTask" targetRef="principalPass">
+      <conditionExpression xsi:type="tFormalExpression">${day &gt; 2}</conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_StudentLeave">
+    <bpmndi:BPMNPlane id="BPMNPlane_StudentLeave" bpmnElement="StudentLeave">
+      <bpmndi:BPMNShape id="BPMNShape_start" bpmnElement="start">
+        <omgdc:Bounds x="160" y="163" width="30" height="30"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="164" y="193" width="23" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_apply" bpmnElement="apply">
+        <omgdc:Bounds x="290" y="138" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_teacherPass" bpmnElement="teacherPass">
+        <omgdc:Bounds x="497" y="138" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_judgeTask" bpmnElement="judgeTask" isMarkerVisible="true">
+        <omgdc:Bounds x="705" y="158" width="40" height="40"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="683" y="198" width="85" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_end" bpmnElement="end">
+        <omgdc:Bounds x="855" y="164" width="28" height="28"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="858" y="192" width="23" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_principalPass" bpmnElement="principalPass">
+        <omgdc:Bounds x="675" y="280" width="100" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_startFlow" bpmnElement="startFlow">
+        <omgdi:waypoint x="189.94999932842546" y="178"/>
+        <omgdi:waypoint x="289.970860954748" y="178"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="218" y="153" width="45" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_principalNotPassFlow" bpmnElement="principalNotPassFlow">
+        <omgdi:waypoint x="675" y="320"/>
+        <omgdi:waypoint x="339.9708609547486" y="320"/>
+        <omgdi:waypoint x="339.9708609547486" y="217.95000000000002"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="497" y="295" width="22" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_teacherNotPassFlow" bpmnElement="teacherNotPassFlow">
+        <omgdi:waypoint x="546.9446358140221" y="138"/>
+        <omgdi:waypoint x="546.9446358140221" y="98.8874737106014"/>
+        <omgdi:waypoint x="339.9708609547486" y="98.8874737106014"/>
+        <omgdi:waypoint x="339.9708609547486" y="138"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="433" y="74" width="22" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_applyFlow" bpmnElement="applyFlow">
+        <omgdi:waypoint x="389.9208609546613" y="178"/>
+        <omgdi:waypoint x="496.9446358140222" y="178"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="421" y="153" width="45" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_teacherPassFlow" bpmnElement="teacherPassFlow">
+        <omgdi:waypoint x="596.8946358140222" y="178"/>
+        <omgdi:waypoint x="705" y="178"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="640" y="153" width="23" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_judgeLess" bpmnElement="judgeLess">
+        <omgdi:waypoint x="744.5095911949685" y="178.43356643356645"/>
+        <omgdi:waypoint x="855.0000829380081" y="178.04860604497966"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="780" y="153" width="40" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_judgeMore" bpmnElement="judgeMore">
+        <omgdi:waypoint x="725.4326241134752" y="197.51043586109145"/>
+        <omgdi:waypoint x="725.1411660777385" y="280"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="706" y="214" width="40" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_principalCheck" bpmnElement="principalCheck">
+        <omgdi:waypoint x="774.9499999999886" y="319.64664310954066"/>
+        <omgdi:waypoint x="866.5" y="319"/>
+        <omgdi:waypoint x="868.7518112709728" y="191.94785201600882"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="810" y="294" width="23" height="14"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

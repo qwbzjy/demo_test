@@ -1,5 +1,6 @@
 package com.example.demo_test;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.example.demo_test.template.ApplicationContextUtil;
 import com.example.demo_test.template.GlassHouse;
 import com.example.demo_test.template.HouseTemplate;
@@ -25,12 +26,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @TestImport
 //@Import(ImportBeanDefinitionRegistrarImpl.class)
 @MapperScan("com.example.demo_test.mapper")
+@Import(cn.hutool.extra.spring.SpringUtil.class)
 public class DemoTestApplication {
 
 
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(DemoTestApplication.class, args);
-        TestImportB bean = run.getBean(TestImportB.class);
+        TestImportB bean = SpringUtil.getBean(TestImportB.class);
+//        TestImportB bean = run.getBean(TestImportB.class);
         bean.test();
 
 
