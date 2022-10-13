@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.flowable.org/processdef">
+    <process id="showRoomApply" name="展厅申请" isExecutable="true">
+        <documentation>抄送任务</documentation>
+        <startEvent id="start" name="发起"></startEvent>
+        <exclusiveGateway id="need_speaker" name="讲解协助"></exclusiveGateway>
+        <userTask id="department" name="综合部综合事务中心" flowable:assignee="${dpReviewer}">
+            <extensionElements>
+                <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler">
+                    <![CDATA[false]]></modeler:initiator-can-complete>
+            </extensionElements>
+        </userTask>
+        <userTask id="cc" name="传阅" flowable:assignee="${ccUser}" flowable:formKey="cc_key">
+            <extensionElements>
+                <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler">
+                    <![CDATA[false]]></modeler:initiator-can-complete>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false" flowable:collection="ccUsers"
+                                              flowable:elementVariable="ccUser">
+                <completionCondition>${nrOfCompletedInstances == nrOfInstances}</completionCondition>
+            </multiInstanceLoopCharacteristics>
+        </userTask>
+        <endEvent id="end" name="流程结束"></endEvent>
+        <userTask id="center" name="所在部门/中心负责人" flowable:assignee="${ctReviewer}">
+            <extensionElements>
+                <modeler:initiator-can-complete xmlns:modeler="http://flowable.org/modeler">
+                    <![CDATA[false]]></modeler:initiator-can-complete>
+            </extensionElements>
+        </userTask>
+        <endEvent id="stop" name="流程终止">
+            <terminateEventDefinition></terminateEventDefinition>
+        </endEvent>
+        <sequenceFlow id="without_speaker" name="without_speaker" sourceRef="need_speaker" targetRef="department">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!needSpeaker}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="has_speaker" name="has_speaker" sourceRef="need_speaker" targetRef="center">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${needSpeaker}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="cent_approved" name="approved" sourceRef="center" targetRef="department">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="center_refuse" name="refused" sourceRef="center" targetRef="stop">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="dp_refused" name="refused" sourceRef="department" targetRef="stop">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!pass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="dp_end" name="approved&amp;end" sourceRef="department" targetRef="end">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${pass && var:empty(ccUsers)}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="dp_approved" name="approved&amp;cc" sourceRef="department" targetRef="cc">
+            <conditionExpression xsi:type="tFormalExpression">
+                <![CDATA[${pass && var:isNotEmpty(ccUsers)}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="cc_pass" sourceRef="cc" targetRef="end">
+            <conditionExpression xsi:type="tFormalExpression"><![CDATA[${pass}]]></conditionExpression>
+        </sequenceFlow>
+        <sequenceFlow id="sid-4885E58D-56BB-49C3-A2B9-9837B37DE4EB" sourceRef="start"
+                      targetRef="need_speaker"></sequenceFlow>
+    </process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_showRoomApply">
+        <bpmndi:BPMNPlane bpmnElement="showRoomApply" id="BPMNPlane_showRoomApply">
+            <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+                <omgdc:Bounds height="30.0" width="30.0" x="75.0" y="163.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="need_speaker" id="BPMNShape_need_speaker">
+                <omgdc:Bounds height="40.0" width="40.0" x="180.0" y="158.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="department" id="BPMNShape_department">
+                <omgdc:Bounds height="80.0" width="100.0" x="330.0" y="138.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="cc" id="BPMNShape_cc">
+                <omgdc:Bounds height="80.0" width="100.0" x="525.0" y="225.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+                <omgdc:Bounds height="28.0" width="28.0" x="730.0" y="164.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="center" id="BPMNShape_center">
+                <omgdc:Bounds height="80.0" width="100.0" x="150.0" y="290.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape bpmnElement="stop" id="BPMNShape_stop">
+                <omgdc:Bounds height="28.0" width="28.0" x="450.0" y="316.0"></omgdc:Bounds>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge bpmnElement="dp_end" id="BPMNEdge_dp_end">
+                <omgdi:waypoint x="429.95000000000005" y="178.0"></omgdi:waypoint>
+                <omgdi:waypoint x="730.0" y="178.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="center_refuse" id="BPMNEdge_center_refuse">
+                <omgdi:waypoint x="249.94999999990125" y="330.0"></omgdi:waypoint>
+                <omgdi:waypoint x="450.0" y="330.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="sid-4885E58D-56BB-49C3-A2B9-9837B37DE4EB"
+                             id="BPMNEdge_sid-4885E58D-56BB-49C3-A2B9-9837B37DE4EB">
+                <omgdi:waypoint x="104.94999848995758" y="178.0"></omgdi:waypoint>
+                <omgdi:waypoint x="180.0" y="178.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="cent_approved" id="BPMNEdge_cent_approved">
+                <omgdi:waypoint x="247.30921052631578" y="290.0"></omgdi:waypoint>
+                <omgdi:waypoint x="332.63157894736844" y="217.95000000000002"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="cc_pass" id="BPMNEdge_cc_pass">
+                <omgdi:waypoint x="624.9499999999999" y="264.27500000000003"></omgdi:waypoint>
+                <omgdi:waypoint x="732.6646441007161" y="186.1887825520107"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="has_speaker" id="BPMNEdge_has_speaker">
+                <omgdi:waypoint x="200.0" y="197.94344181459567"></omgdi:waypoint>
+                <omgdi:waypoint x="200.0" y="290.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="dp_refused" id="BPMNEdge_dp_refused">
+                <omgdi:waypoint x="403.6846428571429" y="217.95000000000002"></omgdi:waypoint>
+                <omgdi:waypoint x="461.8191015393078" y="316.0078671963895"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="dp_approved" id="BPMNEdge_dp_approved">
+                <omgdi:waypoint x="429.95" y="214.60719178082192"></omgdi:waypoint>
+                <omgdi:waypoint x="525.0" y="284.2671232876712"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge bpmnElement="without_speaker" id="BPMNEdge_without_speaker">
+                <omgdi:waypoint x="219.9444614103276" y="178.0"></omgdi:waypoint>
+                <omgdi:waypoint x="329.99999999997226" y="178.0"></omgdi:waypoint>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</definitions>
