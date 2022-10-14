@@ -32,7 +32,7 @@ public class HutoolTest {
 //        System.out.println(da.split("年")[1]);
 
         String str = "https://www.runoob.com:80/html/html-tutorial.html";
-        String pattern = " /(\\w+):\\/\\/([^/:]+)(:\\d*)?([^# ]*)/";
+        String pattern = "(\\w+):\\/\\/([^/:]+)(:\\d*)?([^# ]*)";
         Pattern compile = Pattern.compile(pattern);
         Matcher matcher = compile.matcher(str);
 //        String[] split = str.split(pattern);
