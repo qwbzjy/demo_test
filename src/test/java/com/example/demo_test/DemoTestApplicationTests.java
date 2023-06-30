@@ -156,6 +156,8 @@ class DemoTestApplicationTests {
         queryWrapper.like("name", "ice");
         List<Map<String, Object>> maps = userMapper.selectMaps(queryWrapper);
         maps.forEach(System.out::println);
+        Optional.of(maps);
+        Optional.ofNullable(maps);
     }
 
     @Test
