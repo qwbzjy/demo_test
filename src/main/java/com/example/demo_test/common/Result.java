@@ -6,11 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +38,17 @@ public class Result {
         String fileName = "D://职能部门工作职责统计表7.11.xlsx";
         InputStream inputStream = null;
         try {
+           /* Path path = Paths.get("xxxx.txt");
+            List<String> strings = Files.readAllLines(path);
+            //读取视频
+            try(BufferedInputStream inputStream1 = new BufferedInputStream(new FileInputStream("xxxxxx.mp4"))){
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while((bytesRead = inputStream1.read(buffer))!=-1){
+
+                }
+            }*/
+
 
             File file = new File(fileName);
             inputStream = new FileInputStream(file);
